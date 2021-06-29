@@ -510,7 +510,7 @@ abstract contract ERC721Enumerable is ERC165, ERC721 {
     }
 }
 
-contract ERC721Metadata is ERC721Enumerable, usingOraclize {
+abstract contract ERC721Metadata is ERC721Enumerable, usingOraclize {
     using Buffer for uint256;
 
     string private _name;
@@ -562,25 +562,20 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
     }
 }
 
-//  TODO's: Create CustomERC721Token contract that inherits from the ERC721Metadata contract. You can name this contract as you please
-//  1) Pass in appropriate values for the inherited ERC721Metadata contract
-//      - make the base token uri: https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/
-//  2) create a public mint() that does the following:
-//      -can only be executed by the contract owner
-//      -takes in a 'to' address, tokenId, and tokenURI as parameters
-//      -returns a true boolean upon completion of the function
-//      -calls the superclass mint and setTokenURI functions
-contract Casa is ERC721Metadata(
-        "Casa", 
-        "CASA", 
-        "https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone"
-    ) 
-{
+contract Casa is ERC721Metadata {
+    constructor (
+        string memory name, 
+        string memory symbol, 
+        string memory baseTokenURI
+    )
+        ERC721Metadata(name, symbol, baseTokenURI)  
+    {}
+
     function mint(
         address to, 
         uint256 tokenId
     ) 
-        external 
+        public 
         onlyOwner
         returns(bool)
     {
