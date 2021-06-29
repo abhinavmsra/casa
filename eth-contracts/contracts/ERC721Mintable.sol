@@ -4,15 +4,15 @@ pragma solidity ^0.8.6;
 import '@openzeppelin/contracts/utils/Address.sol';
 import '@openzeppelin/contracts/utils/Counters.sol';
 import '@openzeppelin/contracts/utils/math/SafeMath.sol';
+import '@openzeppelin/contracts/utils/Strings.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol';
-import "./Oraclize.sol";
 
 /// @author Abhinav Mishra
 
 /********************************************* */
 /* Ownable Smart Contract                      */
 /********************************************* */
-abstract contract Ownable {
+contract Ownable {
     address private _owner;
 
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
@@ -61,7 +61,7 @@ abstract contract Ownable {
 /********************************************* */
 /* Pausable Smart Contract                     */
 /********************************************* */
-abstract contract Pausable is Ownable {
+contract Pausable is Ownable {
     bool private _paused;
 
     event Paused(address indexed owner);
@@ -109,12 +109,8 @@ abstract contract Pausable is Ownable {
     }
 }
 
-abstract contract ERC165 {
+contract ERC165 {
     bytes4 private constant _INTERFACE_ID_ERC165 = 0x01ffc9a7;
-    /*
-     * 0x01ffc9a7 ===
-     *     bytes4(keccak256('supportsInterface(bytes4)'))
-     */
 
     /**
      * @dev a mapping of interface id to whether or not it's supported
@@ -145,7 +141,7 @@ abstract contract ERC165 {
     }
 }
 
-abstract contract ERC721 is Pausable, ERC165 {
+contract ERC721 is Pausable, ERC165 {
     using SafeMath for uint256;
     using Address  for address;
     using Counters for Counters.Counter;
@@ -339,7 +335,7 @@ abstract contract ERC721 is Pausable, ERC165 {
     }
 }
 
-abstract contract ERC721Enumerable is ERC165, ERC721 {
+contract ERC721Enumerable is ERC165, ERC721 {
     using SafeMath for uint256;
     
     // Mapping from owner to list of owned token IDs
@@ -355,13 +351,7 @@ abstract contract ERC721Enumerable is ERC165, ERC721 {
     mapping(uint256 => uint256) private _allTokensIndex;
 
     bytes4 private constant _INTERFACE_ID_ERC721_ENUMERABLE = 0x780e9d63;
-    /*
-     * 0x780e9d63 ===
-     *     bytes4(keccak256('totalSupply()')) ^
-     *     bytes4(keccak256('tokenOfOwnerByIndex(address,uint256)')) ^
-     *     bytes4(keccak256('tokenByIndex(uint256)'))
-     */
-
+    
     /**
      * @dev Constructor function
      */
@@ -425,7 +415,6 @@ abstract contract ERC721Enumerable is ERC165, ERC721 {
         super._mint(to, tokenId);
 
         _addTokenToOwnerEnumeration(to, tokenId);
-
         _addTokenToAllTokensEnumeration(tokenId);
     }
 
@@ -510,8 +499,8 @@ abstract contract ERC721Enumerable is ERC165, ERC721 {
     }
 }
 
-abstract contract ERC721Metadata is ERC721Enumerable, usingOraclize {
-    using Buffer for uint256;
+contract ERC721Metadata is ERC721Enumerable {
+    using Strings for uint256;
 
     string private _name;
     string private _symbol;
@@ -520,12 +509,6 @@ abstract contract ERC721Metadata is ERC721Enumerable, usingOraclize {
     mapping(uint256 => string) private _tokenURIs;
 
     bytes4 private constant _INTERFACE_ID_ERC721_METADATA = 0x5b5e139f;
-    /*
-     * 0x5b5e139f ===
-     *     bytes4(keccak256('name()')) ^
-     *     bytes4(keccak256('symbol()')) ^
-     *     bytes4(keccak256('tokenURI(uint256)'))
-     */
 
     constructor (string memory name, string memory symbol, string memory baseTokenURI) {
         _name         = name;
@@ -556,9 +539,11 @@ abstract contract ERC721Metadata is ERC721Enumerable, usingOraclize {
     }
 
     function setTokenURI(uint256 tokenId) internal {
-        require(_exists(tokenId));
+        require(_exists(tokenId), "tokenId must exist");
 
-        _tokenURIs[tokenId] = super.strConcat(_baseTokenURI, super.uint2str(tokenId));
+        _tokenURIs[tokenId] = string(
+            abi.encodePacked(_baseTokenURI, tokenId.toString())
+        );
     }
 }
 
@@ -579,8 +564,8 @@ contract Casa is ERC721Metadata {
         onlyOwner
         returns(bool)
     {
-        super._mint(to, tokenId);
-        super.setTokenURI(tokenId);
+        _mint(to, tokenId);
+        setTokenURI(tokenId);
         return(true);
     }
 }

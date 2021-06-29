@@ -26,6 +26,7 @@ contract SolnSquareVerifier is Casa(
   }
 
   function mintToken(
+    address to,
     uint256 tokenId, 
     uint[2] memory a, 
     uint[2][2] memory b, 
@@ -33,20 +34,22 @@ contract SolnSquareVerifier is Casa(
     uint[2] memory input
   ) 
     public
+    onlyOwner
   {
       require(verifier.verifyTx(a, b, c, input), "solution must be valid");
-      addSolution(tokenId, a, b, c, input);
-      super.mint(msg.sender, tokenId);
+      addSolution(to, tokenId, a, b, c, input);
+      super.mint(to, tokenId);
   }
 
   function addSolution(
+    address to,
     uint256 tokenId, 
     uint[2] memory a, 
     uint[2][2] memory b, 
     uint[2] memory c, 
     uint[2] memory input
   ) 
-    private 
+    public 
   {
       bytes32 key = keccak256(abi.encodePacked(a,b,c,input));
 
@@ -55,8 +58,8 @@ contract SolnSquareVerifier is Casa(
         "solution must be unique"
       );
 
-      uniqueSolutions[key] = Solution({ index: tokenId, submitter: msg.sender });
-      emit NewSolution(msg.sender);
+      uniqueSolutions[key] = Solution({ index: tokenId, submitter: to });
+      emit NewSolution(to);
   }
 }
 
