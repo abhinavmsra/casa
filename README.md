@@ -4,10 +4,15 @@ Udacity capstone to build a decentralized housing product.
 ## Dependencies
 
 Truffle - v5.3.12 (core: 5.3.12)
+
 Solidity - 0.8.6 (solc-js)
+
 Node - v15.4.0
+
 Web3.js - v1.3.6
+
 @openzeppelin/contracts - 4.1.0
+
 
 ## Notes
 
