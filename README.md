@@ -18,8 +18,8 @@ Web3.js - v1.3.6
 - Install `truffle` and other required dependencies
 
 ```
-$ npm install -g truffle
-$ npm install
+npm install -g truffle
+npm install
 ```
 
 - Install Ganache
@@ -31,7 +31,7 @@ $ npm install
 2) Deploy locally using npm script
 
 ```
-$ npm run migrate:dev
+npm run migrate:dev
 ```
 
 Migrations use pre-calculated `zokrates` proofs from `/eth-contracts/proofs/proofs.json`
@@ -39,13 +39,13 @@ Migrations use pre-calculated `zokrates` proofs from `/eth-contracts/proofs/proo
 ## Testing
 
 ```
-$ npm run test
+npm run test
 ```
 
 ## Rinkeby Deployment
 
 ```
-$ npm run migrate:rinkeby
+npm run migrate:rinkeby
 ```
 
 ## Contract Abi's
