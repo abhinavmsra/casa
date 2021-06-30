@@ -13,6 +13,44 @@ Web3.js - v1.3.6
 
 @openzeppelin/contracts - 4.1.0
 
+## Installation
+
+- Install `truffle` and other required dependencies
+
+```
+$ npm install -g truffle
+$ npm install
+```
+
+- Install Ganache
+
+## Local Deployment
+
+1) Run a local blockchain node using Ganache on port :7545
+
+2) Deploy locally using npm script
+
+```
+$ npm run migrate:dev
+```
+
+Migrations use pre-calculated `zokrates` proofs from `/eth-contracts/proofs/proofs.json`
+
+## Testing
+
+```
+$ npm run test
+```
+
+## Rinkeby Deployment
+
+```
+$ npm run migrate:rinkeby
+```
+
+## Contract Abi's
+
+[View __SolnSquareVerifier__ ABI](SolnSquareVerifierABI.json)
 
 ## Notes
 

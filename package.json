@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "lite-server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "migrate:dev": "cd eth-contracts && truffle migrate --network development --reset",
+    "migrate:rinkeby": "cd eth-contracts && truffle migrate --network rinkeby --reset",
+    "test": "cd eth-contracts && truffle test --network development"
   },
   "keywords": [],
   "author": "pk <pkrasam@gmail.com> (https://ipfs.infura.io/ipfs/QmSXiR9Khm3yo1J67nUopvVBxFJ8YGN2fUGZ34Etr3m92x/)",
